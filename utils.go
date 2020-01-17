@@ -1,4 +1,4 @@
-package main
+package td_ameritrade_client_golang
 
 func AssertInt64(obj interface{}) int64 {
 	res, ok := obj.(int64)

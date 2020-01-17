@@ -1,4 +1,4 @@
-package main
+package td_ameritrade_client_golang
 
 import (
 	"net/http"
