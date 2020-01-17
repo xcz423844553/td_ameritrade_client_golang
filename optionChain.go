@@ -112,11 +112,11 @@ type ExpirationDate struct {
 	Date string `json:"date"`
 }
 
-func GetOptionChain(client *http.Client, symbol string) OptionChain {
+func GetOptionChain(client *http.Client, consumerKey string, symbol string) OptionChain {
 	request, err := http.NewRequest("GET", urlGetOptionChain, nil)
 	handleFatalErr("GetOptionChain/request", err)
 	q := request.URL.Query()
-	q.Add("apikey", clientID)
+	q.Add("apikey", consumerKey)
 	q.Add("symbol", symbol)
 	q.Add("includeQuotes", "true")
 	request.URL.RawQuery = q.Encode()
