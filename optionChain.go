@@ -137,6 +137,9 @@ func GetOptionChain(client *http.Client, consumerKey string, symbol string) Opti
 
 func parseExpDateMap(obj interface{}) []Option {
 	var opts []Option
+	if obj == nil {
+		return opts
+	}
 	expDateMap := obj.(map[string]interface{})
 	for _, strikePriceMap := range expDateMap {
 		switch strikePriceMap.(type) {
