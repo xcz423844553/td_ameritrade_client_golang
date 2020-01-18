@@ -1,4 +1,4 @@
-package td_ameritrade_client_golang
+package main
 
 import (
 	"encoding/json"
@@ -34,12 +34,13 @@ type Option struct {
 	Symbol                 string               `json:"symbol"`
 	Description            string               `json:"description"`
 	ExchangeName           string               `json:"exchangeName"`
-	BidPrice               float64              `json:"bidPrice"`
-	AskPrice               float64              `json:"askPrice"`
-	LastPrice              float64              `json:"lastPrice"`
-	MarkPrice              float64              `json:"markPrice"`
+	Bid                    float64              `json:"bid"`
+	Ask                    float64              `json:"ask"`
+	Last                   float64              `json:"last"`
+	Mark                   float64              `json:"mark"`
 	BidSize                int64                `json:"bidSize"`
 	AskSize                int64                `json:"askSize"`
+	BidAskSize             string               `json:"bidAskSize"`
 	LastSize               int64                `json:"lastSize"`
 	HighPrice              float64              `json:"highPrice"`
 	LowPrice               float64              `json:"lowPrice"`
@@ -57,15 +58,14 @@ type Option struct {
 	Rho                    float64              `json:"rho"`
 	TimeValue              float64              `json:"timeValue"`
 	OpenInterest           float64              `json:"openInterest"`
-	IsInTheMoney           bool                 `json:"isInTheMoney"`
 	TheoreticalOptionValue float64              `json:"theoreticalOptionValue"`
 	TheoreticalVolatility  float64              `json:"theoreticalVolatility"`
-	IsMini                 bool                 `json:"isMini"`
-	IsNonStandard          bool                 `json:"isNonStandard"`
 	OptionDeliverablesList []OptionDeliverables `json:"optionDeliverablesList"`
 	StrikePrice            float64              `json:"strikePrice"`
-	ExpirationDate         string               `json:"expirationDate"`
+	ExpirationDate         int64                `json:"expirationDate"`
+	DaysToExpiration       int64                `json:"daysToExpiration"`
 	ExpirationType         string               `json:"expirationType"`
+	LastTradingDay         int64                `json:"lastTradingDay"`
 	Multiplier             float64              `json:"multiplier"`
 	SettlementType         string               `json:"settlementType"`
 	DeliverableNote        string               `json:"deliverableNote"`
@@ -73,6 +73,9 @@ type Option struct {
 	PercentChange          float64              `json:"percentChange"`
 	MarkChange             float64              `json:"markChange"`
 	MarkPercentChange      float64              `json:"markPercentChange"`
+	InTheMoney             bool                 `json:"inTheMoney"`
+	Mini                   bool                 `json:"mini"`
+	NonStandard            bool                 `json:"nonStandard"`
 }
 
 type OptionDeliverables struct {
@@ -146,12 +149,13 @@ func parseExpDateMap(obj interface{}) []Option {
 				opt.Symbol = AssertString(option["symbol"])
 				opt.Description = AssertString(option["description"])
 				opt.ExchangeName = AssertString(option["exchangeName"])
-				opt.BidPrice = AssertFloat64(option["bidPrice"])
-				opt.AskPrice = AssertFloat64(option["askPrice"])
-				opt.LastPrice = AssertFloat64(option["lastPrice"])
-				opt.MarkPrice = AssertFloat64(option["markPrice"])
+				opt.Bid = AssertFloat64(option["bid"])
+				opt.Ask = AssertFloat64(option["ask"])
+				opt.Last = AssertFloat64(option["last"])
+				opt.Mark = AssertFloat64(option["mark"])
 				opt.BidSize = AssertInt64(option["bidSize"])
 				opt.AskSize = AssertInt64(option["askSize"])
+				opt.BidAskSize = AssertString(option["bidAskSize"])
 				opt.LastSize = AssertInt64(option["lastSize"])
 				opt.HighPrice = AssertFloat64(option["highPrice"])
 				opt.LowPrice = AssertFloat64(option["lowPrice"])
@@ -169,14 +173,13 @@ func parseExpDateMap(obj interface{}) []Option {
 				opt.Rho = AssertFloat64(option["rho"])
 				opt.TimeValue = AssertFloat64(option["timeValue"])
 				opt.OpenInterest = AssertFloat64(option["openInterest"])
-				opt.IsInTheMoney = AssertBool(option["isInTheMoney"])
 				opt.TheoreticalOptionValue = AssertFloat64(option["theoreticalOptionValue"])
 				opt.TheoreticalVolatility = AssertFloat64(option["theoreticalVolatility"])
-				opt.IsMini = AssertBool(option["isMini"])
-				opt.IsNonStandard = AssertBool(option["isNonStandard"])
 				opt.StrikePrice = AssertFloat64(option["strikePrice"])
-				opt.ExpirationDate = AssertString(option["expirationDate"])
+				opt.ExpirationDate = AssertInt64(option["expirationDate"])
+				opt.DaysToExpiration = AssertInt64(option["daysToExpiration"])
 				opt.ExpirationType = AssertString(option["expirationType"])
+				opt.LastTradingDay = AssertInt64(option["lastTradingDay"])
 				opt.Multiplier = AssertFloat64(option["multiplier"])
 				opt.SettlementType = AssertString(option["settlementType"])
 				opt.DeliverableNote = AssertString(option["deliverableNote"])
@@ -184,6 +187,9 @@ func parseExpDateMap(obj interface{}) []Option {
 				opt.PercentChange = AssertFloat64(option["percentChange"])
 				opt.MarkChange = AssertFloat64(option["markChange"])
 				opt.MarkPercentChange = AssertFloat64(option["markPercentChange"])
+				opt.InTheMoney = AssertBool(option["inTheMoney"])
+				opt.Mini = AssertBool(option["mini"])
+				opt.NonStandard = AssertBool(option["nonStandard"])
 				opts = append(opts, opt)
 			}
 		default:

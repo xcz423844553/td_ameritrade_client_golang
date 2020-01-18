@@ -1,4 +1,4 @@
-package td_ameritrade_client_golang
+package main
 
 import "log"
 

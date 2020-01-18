@@ -1,4 +1,4 @@
-package td_ameritrade_client_golang
+package main
 
 const (
 	urlAccessToken    = "https://api.tdameritrade.com/v1/oauth2/token"
